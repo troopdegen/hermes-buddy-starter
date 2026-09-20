@@ -1,0 +1,8 @@
+node_modules/
+dist/
+coverage/
+
+# Real secrets never land in tracked files. Only .env.example (placeholders) is tracked.
+.env
+.env.*
+!.env.example

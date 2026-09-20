@@ -1,0 +1,144 @@
+:root {
+  color-scheme: light dark;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  line-height: 1.5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0f1115;
+  color: #e6e8eb;
+}
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.app__header h1 {
+  margin: 0 0 0.25rem;
+}
+
+.app__sub {
+  margin: 0 0 1rem;
+  color: #9aa4b2;
+}
+
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.badge {
+  font-size: 0.8rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: #1c2029;
+  border: 1px solid #2b313c;
+}
+
+.badge--ok {
+  border-color: #2f855a;
+  color: #9ae6b4;
+}
+
+.badge--warn {
+  border-color: #9c4221;
+  color: #fbd38d;
+}
+
+.panel {
+  background: #161a21;
+  border: 1px solid #232833;
+  border-radius: 12px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.panel h2 {
+  margin-top: 0;
+  font-size: 1.05rem;
+}
+
+.chat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 60px;
+  margin-bottom: 0.75rem;
+}
+
+.bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 10px;
+  background: #1c2029;
+}
+
+.bubble strong {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #7c8698;
+}
+
+.bubble--user {
+  align-self: flex-end;
+  background: #223045;
+}
+
+.row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+input {
+  flex: 1;
+  padding: 0.6rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #2b313c;
+  background: #0f1115;
+  color: inherit;
+}
+
+button {
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  border: none;
+  background: #3b82f6;
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.muted {
+  color: #7c8698;
+}
+
+.error {
+  color: #fc8181;
+}
+
+.result {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: #0f1115;
+  border: 1px solid #2b313c;
+  border-radius: 8px;
+  overflow-x: auto;
+  max-height: 320px;
+  font-size: 0.8rem;
+}

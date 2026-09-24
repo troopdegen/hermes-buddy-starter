@@ -1,3 +1,4 @@
+import fs from "node:fs";
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -6,6 +7,42 @@ import react from "@vitejs/plugin-react";
 // local development keeps Vite's normal localhost-only host check and
 // websocket HMR unchanged.
 const PREVIEW_MODE = process.env.PREVIEW_MODE;
+
+// Path is frozen in the orchestrator contract
+// (packages/agent-launcher-orchestrator/src/pack/preview.ts,
+// PREVIEW_ACTIVITY_FILE): the launcher's watchdog (B4) polls this file's
+// mtime, plus the newest file under the app directory, to decide whether the
+// Preview is idle and can be put to sleep.
+const PREVIEW_ACTIVITY_FILE = "/tmp/buddi-preview-activity";
+
+function touchActivityFile() {
+  const now = new Date();
+  fs.utimes(PREVIEW_ACTIVITY_FILE, now, now, (err) => {
+    if (err) {
+      fs.open(PREVIEW_ACTIVITY_FILE, "w", (openErr, fd) => {
+        if (!openErr && fd !== undefined) fs.close(fd, () => {});
+      });
+    }
+  });
+}
+
+// Activity plugin (T5.4): every request that is not a /__preview/* request
+// (the poll plugin's own version endpoint, or a future preview-only path)
+// touches the activity file above. Only wired in when PREVIEW_MODE is set, so
+// it never runs during plain `pnpm dev` or `pnpm build`.
+function previewActivityPlugin(): Plugin {
+  return {
+    name: "buddi-preview-activity",
+    configureServer(server) {
+      server.middlewares.use((req, _res, next) => {
+        if (req.url && !req.url.startsWith("/__preview")) {
+          touchActivityFile();
+        }
+        next();
+      });
+    },
+  };
+}
 
 // Poll-mode fallback for the Tenki Preview. The 2026-09-24 spike
 // (workstreams/agent-launcher-v1/docs/research/tenki-preview-hmr-spike.md)
@@ -66,7 +103,11 @@ const previewMode = PREVIEW_MODE === "hmr" ? "hmr" : PREVIEW_MODE ? "poll" : nul
 // allows the Tenki preview host, and switches HMR to either the "hmr" or
 // "poll" strategy above.
 export default defineConfig({
-  plugins: [react(), ...(previewMode === "poll" ? [previewPollPlugin()] : [])],
+  plugins: [
+    react(),
+    ...(previewMode ? [previewActivityPlugin()] : []),
+    ...(previewMode === "poll" ? [previewPollPlugin()] : []),
+  ],
   build: {
     outDir: "dist",
   },

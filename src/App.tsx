@@ -79,66 +79,74 @@ export function App() {
   }
 
   return (
-    <main className="app">
-      <header className="app__header">
-        <h1>Hermes Buddy Starter</h1>
+    <>
+      <header className="app__band">
+        <div className="col">
+          <p className="kicker">BUDDi &middot; hackathon starter</p>
+          <h1>Hermes Buddy Starter</h1>
+        </div>
+      </header>
+
+      <main className="app__main col">
         <p className="app__sub">
           Vite + React front end, Hono server. Keys stay on the server; the
           browser only calls <code>/api/*</code>.
         </p>
         {health && (
           <div className="badges">
-            <span className="badge">model: {health.model}</span>
-            <span className={`badge ${health.keys.nebius ? "badge--ok" : "badge--warn"}`}>
+            <span className="ds-badge">model: {health.model}</span>
+            <span className={`ds-badge ${health.keys.nebius ? "ds-badge-success" : "ds-badge-gold"}`}>
               Nebius key {health.keys.nebius ? "set" : "missing"}
             </span>
-            <span className={`badge ${health.keys.tavily ? "badge--ok" : "badge--warn"}`}>
+            <span className={`ds-badge ${health.keys.tavily ? "ds-badge-success" : "ds-badge-gold"}`}>
               Tavily key {health.keys.tavily ? "set" : "missing"}
             </span>
           </div>
         )}
-      </header>
 
-      <section className="panel">
-        <h2>Chat (Nebius Token Factory + Nemotron)</h2>
-        <div className="chat">
-          {messages.length === 0 && <p className="muted">Ask the model something.</p>}
-          {messages.map((m, i) => (
-            <div key={i} className={`bubble bubble--${m.role}`}>
-              <strong>{m.role}</strong>
-              <span>{m.content}</span>
-            </div>
-          ))}
-        </div>
-        {chatError && <p className="error">{chatError}</p>}
-        <div className="row">
-          <input
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && sendChat()}
-            placeholder="Type a message"
-          />
-          <button onClick={sendChat} disabled={chatBusy}>
-            {chatBusy ? "..." : "Send"}
-          </button>
-        </div>
-      </section>
+        <section className="ds-card">
+          <h2>Chat (Nebius Token Factory + Nemotron)</h2>
+          <div className="chat">
+            {messages.length === 0 && <p className="muted">Ask the model something.</p>}
+            {messages.map((m, i) => (
+              <div key={i} className={`bubble bubble--${m.role}`}>
+                <strong className="kicker">{m.role}</strong>
+                <span>{m.content}</span>
+              </div>
+            ))}
+          </div>
+          {chatError && <p className="ds-note ds-note-error error">{chatError}</p>}
+          <div className="row">
+            <input
+              className="ds-input"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && sendChat()}
+              placeholder="Type a message"
+            />
+            <button className="ds-btn ds-btn-primary" onClick={sendChat} disabled={chatBusy}>
+              {chatBusy ? <span className="ds-spinner" aria-label="sending" /> : "Send"}
+            </button>
+          </div>
+        </section>
 
-      <section className="panel">
-        <h2>Search (Tavily)</h2>
-        <div className="row">
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && runSearch()}
-            placeholder="Search the web"
-          />
-          <button onClick={runSearch} disabled={searchBusy}>
-            {searchBusy ? "..." : "Search"}
-          </button>
-        </div>
-        {searchResult && <pre className="result">{searchResult}</pre>}
-      </section>
-    </main>
+        <section className="ds-card">
+          <h2>Search (Tavily)</h2>
+          <div className="row">
+            <input
+              className="ds-input"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && runSearch()}
+              placeholder="Search the web"
+            />
+            <button className="ds-btn ds-btn-primary" onClick={runSearch} disabled={searchBusy}>
+              {searchBusy ? <span className="ds-spinner" aria-label="searching" /> : "Search"}
+            </button>
+          </div>
+          {searchResult && <pre className="result">{searchResult}</pre>}
+        </section>
+      </main>
+    </>
   );
 }

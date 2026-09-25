@@ -4,10 +4,11 @@
 // `/api/chat`, `/api/search`) used to live directly in server/index.ts,
 // coupled to `@hono/node-server`. Pulling them out into a plain `Hono`
 // instance with no `node:*` or `@hono/node-server` imports lets the same
-// app object be served by three different entry points: server/index.ts
+// app object be served by every host's own entry point: server/index.ts
 // (Node, Railway/Render/local), server/worker.ts (Cloudflare Workers), and
-// api/[[...route]].ts (Vercel Functions). Behavior and response shapes are
-// unchanged from the pre-split server/index.ts.
+// api/health.ts / api/chat.ts / api/search.ts (Vercel Functions, one file
+// per route). Behavior and response shapes are unchanged from the
+// pre-split server/index.ts.
 //
 // Env values (the two service keys and their optional base-url/model
 // overrides) are read per request from Hono's `c.env` (populated by

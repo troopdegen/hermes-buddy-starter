@@ -1,0 +1,16 @@
+{
+  // Cloudflare Workers config (T10.4, B5/Wave 2), not Pages: this deploys the
+  // Starter as a Worker with a static-assets binding, per
+  // https://developers.cloudflare.com/workers/static-assets/. `run_worker_first`
+  // routes /api/* to server/worker.ts (the Hono app); everything else is
+  // served from the Vite build in ./dist, falling back to index.html for
+  // client-side routes via `not_found_handling: single-page-application`.
+  "name": "nebius-nvidia-ai-hackathon-starter",
+  "main": "server/worker.ts",
+  "compatibility_date": "2026-09-25",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  }
+}
